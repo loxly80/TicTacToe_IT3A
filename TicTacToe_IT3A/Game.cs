@@ -15,8 +15,11 @@ namespace TicTacToe_IT3A
         public Action OnChange;
         public Action<Field.State> OnWin;
 
+        private bool hasEnded;
+
         public Game()
         {
+            hasEnded = false;
             winCombinations = new List<int[]>();
             winCombinations.Add(new int[] { 0, 1, 2 });
             winCombinations.Add(new int[] { 3, 4, 5 });
@@ -46,7 +49,7 @@ namespace TicTacToe_IT3A
 
         public void Move(int fieldIndex)
         {
-            if (Fields[fieldIndex].Value == Field.State.Empty)
+            if (Fields[fieldIndex].Value == Field.State.Empty && !hasEnded)
             {
                 Fields[fieldIndex].Value = PlayerOnMove.Value;
                 if (PlayerOnMove == Player1)
@@ -57,12 +60,13 @@ namespace TicTacToe_IT3A
                 {
                     PlayerOnMove = Player1;
                 }
+                OnChange?.Invoke();
                 var winner = IsWinner();
                 if (winner != Field.State.Empty)
                 {
+                    hasEnded = true;
                     OnWin?.Invoke(winner);
                 }
-                OnChange?.Invoke();
             }
         }
 

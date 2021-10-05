@@ -20,6 +20,7 @@ namespace TicTacToe_IT3A
             InitializeComponent();
             game = new Game();
             game.OnChange += Game_OnChange;
+            game.OnWin += Game_OnWin;
             buttons = new Button[9];
             buttons[0] = button1;
             buttons[1] = button2;
@@ -31,6 +32,11 @@ namespace TicTacToe_IT3A
             buttons[7] = button8;
             buttons[8] = button9;
             Game_OnChange();
+        }
+
+        private void Game_OnWin(Field.State state)
+        {
+            MessageBox.Show($"{state} wins");
         }
 
         private void Game_OnChange()
@@ -89,9 +95,14 @@ namespace TicTacToe_IT3A
 
         private void btnRestart_Click(object sender, EventArgs e)
         {
-            if (game != null) game.OnChange -= Game_OnChange;
+            if (game != null)
+            {
+                game.OnChange -= Game_OnChange;
+                game.OnWin -= Game_OnWin;
+            }
             game = new Game();
             game.OnChange += Game_OnChange;
+            game.OnWin += Game_OnWin;
             Game_OnChange();
         }
     }
